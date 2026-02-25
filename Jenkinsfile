@@ -33,7 +33,7 @@ pipeline {
                                 echo $REGISTRY_PASS | docker login registry.spokayhub.top -u $REGISTRY_USER --password-stdin &&
                                 docker pull registry.spokayhub.top/api-nodejs-example:latest &&
                                 docker rm -f api-nodejs || true &&
-                                docker run -d -p 8080:8080 --name api-nodejs --env-file=.env registry.spokayhub.top/api-nodejs-example:latest
+                                docker run -d -p 3000:3000 --name api-nodejs --env-file=.env registry.spokayhub.top/api-nodejs-example:latest
                             "
                         '''
                     }
