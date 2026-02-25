@@ -31,15 +31,15 @@ pipeline {
                             usernamePassword(credentialsId: 'spokay-registry-credentials', usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_PASS'),
                             file(credentialsId: 'api-nodejs-envfile', variable: 'ENVFILE_SECRET')
                         ]) {
-                            sh 'echo $ENVFILE_SECRET > .env'
+                            sh 'cp $ENVFILE_SECRET .env'
                             sh 'chmod 600 .env'
-                            sh 'ls -la'
+                            sh 'scp -o StrictHostKeyChecking=no .env azureuser@74.234.235.112:/home/azureuser/.env'
                             sh '''
                                 ssh -o StrictHostKeyChecking=no azureuser@74.234.235.112 "
                                     echo $REGISTRY_PASS | docker login registry.spokayhub.top -u $REGISTRY_USER --password-stdin &&
                                     docker pull registry.spokayhub.top/api-nodejs-example:latest &&
                                     docker rm -f api-nodejs || true &&
-                                    docker run -d -p 3000:3000 --name api-nodejs --env-file=.env registry.spokayhub.top/api-nodejs-example:latest
+                                    docker run -d -p 3000:3000 --name api-nodejs --env-file=/home/azureuser/.env registry.spokayhub.top/api-nodejs-example:latest
                                 "
                             '''
                         }
