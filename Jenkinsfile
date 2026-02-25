@@ -27,10 +27,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 withCredentials([file(credentialsId: 'api-nodejs-envfile', variable: 'ENVFILE_SECRET')]) {
-                    sh 'echo $ENVFILE_SECRET > .env'
-                    sh 'chmod 600 .env'
-                    sh 'ls -la'
                     sshagent(credentials: ['azure-ssh-credentials']) {
+                        sh 'echo $ENVFILE_SECRET > .env'
+                        sh 'chmod 600 .env'
+                        sh 'ls -la'
                         withCredentials([usernamePassword(credentialsId: 'spokay-registry-credentials', usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_PASS')]) {
                             sh '''
                                 ssh -o StrictHostKeyChecking=no azureuser@74.234.235.112 "
