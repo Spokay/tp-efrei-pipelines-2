@@ -26,12 +26,14 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                withCredentials([file(credentialsId: 'api-nodejs-envfile', variable: 'ENVFILE_SECRET')]) {
                     sshagent(credentials: ['azure-ssh-credentials']) {
                         sh 'echo $ENVFILE_SECRET > .env'
                         sh 'chmod 600 .env'
                         sh 'ls -la'
-                        withCredentials([usernamePassword(credentialsId: 'spokay-registry-credentials', usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_PASS')]) {
+                        withCredentials([
+                            usernamePassword(credentialsId: 'spokay-registry-credentials', usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_PASS'),
+                            file(credentialsId: 'api-nodejs-envfile', variable: 'ENVFILE_SECRET')
+                        ]) {
                             sh '''
                                 ssh -o StrictHostKeyChecking=no azureuser@74.234.235.112 "
                                     echo $REGISTRY_PASS | docker login registry.spokayhub.top -u $REGISTRY_USER --password-stdin &&
@@ -42,7 +44,6 @@ pipeline {
                             '''
                         }
                     }
-                }
             }
         }
     }
