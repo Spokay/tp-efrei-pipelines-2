@@ -32,8 +32,8 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no azureuser@74.234.235.112 "
                                 echo $REGISTRY_PASS | docker login registry.spokayhub.top -u $REGISTRY_USER --password-stdin &&
                                 docker pull registry.spokayhub.top/api-nodejs-example:latest &&
-                                docker rm -f landing-page || true &&
-                                docker run -d -p 8080:8080 --name landing-page registry.spokayhub.top/api-nodejs-example:latest
+                                docker rm -f api-nodejs || true &&
+                                docker run -d -p 8080:8080 --name api-nodejs registry.spokayhub.top/api-nodejs-example:latest
                             "
                         '''
                     }
