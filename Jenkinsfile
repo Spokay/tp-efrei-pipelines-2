@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Spokay/tp-efrei-pipelines-2.git'
+                git branch: 'master', url: 'https://github.com/Spokay/tp-efrei-pipelines-2.git'
             }
         }
         stage('Build') {
